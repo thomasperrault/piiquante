@@ -3,6 +3,7 @@ const http = require('http');
 //Importation de l'application
 const app = require('./app');
 
+
 //Fonction normalizePort renvoie un port valide
 const normalizePort = val => {
   const port = parseInt(val, 10);
@@ -15,8 +16,9 @@ const normalizePort = val => {
   }
   return false;
 };
+
 //Information pour dire à l'application express sur quel port elle tourne
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT ||'3000');
 app.set('port', port);
 
 //Recherche les différentes erreurs et les gère. Enregistrée ensuite dans le serveur
@@ -52,4 +54,3 @@ server.on('listening', () => {
 
 //Serveur écoute le port donné dans la constante "port"
 server.listen(port);
-

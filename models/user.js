@@ -12,4 +12,6 @@ const userSchema = mongoose.Schema({
 //Vérification d'adresse mail unique 
 userSchema.plugin(uniqueValidator);
 //Exportation du modèle avec comme arguments (nom du modèle, schéma)
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema); 
+
+
