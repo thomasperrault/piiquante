@@ -79,13 +79,3 @@ exports.deleteSauce = (req, res, next) => {
             res.status(500).json({ error });
         });
  };
-
-
-
-
-/*
-//Like-Dislike d'une sauce 
-exports.likeSauce = (req, res, netx) => {
-
-}
-*/
