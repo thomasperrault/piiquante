@@ -4,6 +4,7 @@ const mongoose = require('mongoose'); //Importation de mongoose
 const path = require('path'); //Accès au path du serveur
 const dotenv = require('dotenv'); //Importation package pour utiliser les variables d'environnement
 const result = dotenv.config();
+var cors = require('cors');
 const helmet = require('helmet');
 
 const userRoutes = require('./routes/user'); //Importation routeur "user" 
@@ -19,7 +20,7 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS
 //Lancement de rateLimit
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limite chaque IP a 100 requete par windowMs
+  max: 1000, // limite chaque IP a 100 requete par windowMs
   handler: function (req, res,) {
     return res.status(429).json({
       error: 'Vous avez envoyé trop de requetes, merci de renouveler votre demande ultérieurement'
@@ -41,6 +42,9 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
   });
+
+app.use(helmet.crossOriginResourcePolicy({ policy : "cross-origin" })) ;
+app.use(cors());
 
 //Lancement de rateLimit
 app.use(limiter);
