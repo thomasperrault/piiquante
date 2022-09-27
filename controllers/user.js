@@ -1,13 +1,17 @@
 const bcrypt = require('bcrypt'); //Importation package de cryptage 'bcrypt'
+const cryptojs = require('crypto-js'); //Importation de crypto-js
 const jwt = require('jsonwebtoken'); //Importatin package de création de token
 const User = require('../models/User'); //Importation Modèle user
 
 //SIGNUP
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10) //Cryptage du mdp (10 fois la boucle de cryptage)
+    //Chiffrage de l'email avec crypto-js
+    const emailCryptoJs = cryptojs.HmacSHA256(req.body.email, "CLE_SECRETE").toString();
+    //Cryptage du mdp (10 fois la boucle de cryptage)
+    bcrypt.hash(req.body.password, 10) 
         .then(hash => { //Création d'un nouveau user avec l'adresse mail donné et le mdp crypté
             const user = new User({
-                email: req.body.email,
+                email: emailCryptoJs,
                 password: hash
             });
             user.save() //Enregistrement du user dans la BDD
@@ -19,7 +23,9 @@ exports.signup = (req, res, next) => {
 
 //LOGIN
 exports.login = (req, res, next) => {
-    User.findOne({email: req.body.email})
+    //Chiffrage de l'email avec crypto-js
+    const emailCryptoJs = cryptojs.HmacSHA256(req.body.email, "CLE_SECRETE").toString();
+    User.findOne({email: emailCryptoJs})
         .then(user => { //Vérification si le user est dans la BDD
             if (user === null) { //User non enregistré
                 res.status(401).json({message: 'Paire identifiant/mot de passe incorrecte'});
